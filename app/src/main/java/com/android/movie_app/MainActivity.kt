@@ -1,6 +1,7 @@
 package com.android.movie_app
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -32,8 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.android.movie_app.ui.theme.Movie_AppTheme
 import com.android.movie_app.ui.theme.lightGrey
 
@@ -56,7 +60,12 @@ fun MyApp(content: @Composable (PaddingValues) -> Unit) {
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(Color.Magenta),
-                    title = { Text(text = "Movies") }
+                    title = { Text(text = "Movies",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 22.sp
+                        )
+                    ) }
                 )
             }) { paddingValues ->
             content(paddingValues)
@@ -84,7 +93,9 @@ fun MainContent(paddingValues: PaddingValues, movieList: List<String> = listOf(
             LazyColumn {
                 items(items = movieList){
 
-                    MovieRow(movie = it)
+                    MovieRow(movie = it){movie->
+                        Log.d("MOVIES" , "MainContent: $movie")
+                    }
                 }
             }
         }
@@ -93,14 +104,16 @@ fun MainContent(paddingValues: PaddingValues, movieList: List<String> = listOf(
 
 
 @Composable
-fun MovieRow(movie: String){
+fun MovieRow(movie: String,
+                onClickItem: (String) -> Unit
+             ){
         Card (
             modifier = Modifier
                 .padding(4.dp)
                 .fillMaxWidth()
                 .height(130.dp)
                 .clickable {
-                           
+                    onClickItem(movie)
                 },
             colors = CardDefaults.cardColors(lightGrey),
             shape = RoundedCornerShape(16.dp)
@@ -114,17 +127,15 @@ fun MovieRow(movie: String){
                     shape = RectangleShape,
                     shadowElevation = 4.dp)
                 {
-
                     Icon(imageVector = Icons.Default.AccountBox,
                         contentDescription = "Movie Image",
                         tint = Color.Black)
-
                 }
                 Text(text = movie)
-
-            }
+            }                    
         }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -133,3 +144,5 @@ fun GreetingPreview() {
         MainContent(it)
     }
 }
+
+
