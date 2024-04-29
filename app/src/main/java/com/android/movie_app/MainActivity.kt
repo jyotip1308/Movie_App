@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.android.movie_app.navigation.MovieNavigation
 import com.android.movie_app.ui.theme.Movie_AppTheme
 import com.android.movie_app.ui.theme.lightGrey
 
@@ -45,62 +46,21 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp { anything ->
-                MainContent(anything)
+            MyApp {
+                MovieNavigation()
             }
         }
     }
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun MyApp(content: @Composable (PaddingValues) -> Unit) {
     Movie_AppTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(Color.Magenta),
-                    title = { Text(text = "Movies",
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp
-                        )
-                    ) }
-                )
-            }) { paddingValues ->
-            content(paddingValues)
-        }
+        content(PaddingValues())
+
     }
 }
 
-@Composable
-fun MainContent(paddingValues: PaddingValues, movieList: List<String> = listOf(
-    "Avatar",
-    "Rockstar",
-    "Harry Potter",
-    "Day Dreamer",
-    "Lock & Key",
-    "Happiness...",
-    "Life"
-)) {
-
-    Column(modifier = Modifier.padding(12.dp)) {
-
-        Surface(
-            modifier = Modifier.padding(paddingValues),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            LazyColumn {
-                items(items = movieList){
-
-                    MovieRow(movie = it){movie->
-                        Log.d("MOVIES" , "MainContent: $movie")
-                    }
-                }
-            }
-        }
-    }
-}
 
 
 @Composable
@@ -141,7 +101,7 @@ fun MovieRow(movie: String,
 @Composable
 fun GreetingPreview() {
     MyApp {
-        MainContent(it)
+        MovieNavigation()
     }
 }
 
