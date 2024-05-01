@@ -1,6 +1,5 @@
 package com.android.movie_app.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -21,8 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.android.movie_app.MovieRow
+import com.android.movie_app.models.Movie
+import com.android.movie_app.models.getMovies
 import com.android.movie_app.navigation.MovieScreens
+import com.android.movie_app.widgets.MovieRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,20 +43,13 @@ fun HomeScreen(navHostController: NavHostController){
         }) { paddingValues ->
         MainContent(navHostController,paddingValues)
     }
-
 }
-
 @Composable
-fun MainContent(navHostController: NavHostController,
-                paddingValues: PaddingValues, movieList: List<String> = listOf(
-    "Avatar",
-    "Rockstar",
-    "Harry Potter",
-    "Day Dreamer",
-    "Lock & Key",
-    "Happiness...",
-    "Life"
-)) {
+fun MainContent(
+    navHostController: NavHostController,
+    paddingValues: PaddingValues,
+    movieList: List<Movie> = getMovies())
+{
 
     Column(modifier = Modifier.padding(12.dp)) {
 
@@ -66,9 +60,8 @@ fun MainContent(navHostController: NavHostController,
             LazyColumn {
                 items(items = movieList){
 
-                    MovieRow(movie = it){movie->
+                    MovieRow(movie = it){ movie->
                         navHostController.navigate(route = MovieScreens.DetailsScreen.name+"/$movie")
-//                        Log.d("MOVIES" , "MainContent: $movie")
                     }
                 }
             }

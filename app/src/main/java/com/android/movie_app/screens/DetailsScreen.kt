@@ -65,14 +65,10 @@ fun DetailsScreen(navHostController: NavHostController, movieData: String?){
 
                 Text(text = movieData.toString(),
                     style = TextStyle(
-                        fontSize = 24.sp
+                        fontSize = 20.sp
                     )
                 )
-
             }
         }
-
     }
-
-
 }
