@@ -1,5 +1,6 @@
 package com.android.movie_app.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +9,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -28,10 +34,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
+import com.android.movie_app.models.Movie
+import com.android.movie_app.models.getMovies
+import com.android.movie_app.widgets.MovieRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsScreen(navHostController: NavHostController, movieData: String?){
+fun DetailsScreen(navHostController: NavHostController, movieId: String?){
+
+    val newMovieList = getMovies().filter { movie ->
+       movie.id == movieId
+    }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -58,17 +72,52 @@ fun DetailsScreen(navHostController: NavHostController, movieData: String?){
     } ) {it
 
         Surface (modifier = Modifier
+            .padding(top = 64.dp)
             .fillMaxWidth()
             .fillMaxHeight()){
-            Column(verticalArrangement = Arrangement.Center,
+            Column(verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
-                Text(text = movieData.toString(),
-                    style = TextStyle(
-                        fontSize = 20.sp
-                    )
-                )
+
+                MovieRow(movie = newMovieList.first())
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Divider()
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(text = "Movie Images",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold)
+
+                HorizontalScrollImageView(newMovieList)
             }
+        }
+    }
+}
+
+@Composable
+private fun HorizontalScrollImageView(newMovieList: List<Movie>) {
+    LazyRow {
+        items(newMovieList[0].images) { image ->
+
+            Card(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(240.dp)
+            ) {
+                Row(modifier = Modifier.fillMaxHeight()
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = rememberImagePainter(data = image),
+                        contentDescription = "Images"
+                    )
+                }
+
+            }
+
         }
     }
 }

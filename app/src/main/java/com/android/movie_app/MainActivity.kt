@@ -46,7 +46,6 @@ class MainActivity : ComponentActivity() {
 fun MyApp(content: @Composable (PaddingValues) -> Unit) {
     Movie_AppTheme {
         content(PaddingValues())
-
     }
 }
 
